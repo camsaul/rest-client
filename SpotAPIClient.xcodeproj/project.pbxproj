@@ -11,7 +11,7 @@
 		D1863FF6199D2E340028D38B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D1863FF4199D2E340028D38B /* InfoPlist.strings */; };
 		D1863FF8199D2E340028D38B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D1863FF7199D2E340028D38B /* main.m */; };
 		D1863FFC199D2E340028D38B /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = D1863FFA199D2E340028D38B /* Credits.rtf */; };
-		D1863FFF199D2E340028D38B /* Document.m in Sources */ = {isa = PBXBuildFile; fileRef = D1863FFE199D2E340028D38B /* Document.m */; };
+		D1863FFF199D2E340028D38B /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1863FFE199D2E340028D38B /* Document.mm */; };
 		D1864002199D2E340028D38B /* Document.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1864000199D2E340028D38B /* Document.xib */; };
 		D1864005199D2E340028D38B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1864003199D2E340028D38B /* MainMenu.xib */; };
 		D1864007199D2E340028D38B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1864006199D2E340028D38B /* Images.xcassets */; };
@@ -19,6 +19,7 @@
 		D186400F199D2E340028D38B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1863FEB199D2E340028D38B /* Cocoa.framework */; };
 		D1864017199D2E340028D38B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D1864015199D2E340028D38B /* InfoPlist.strings */; };
 		D1864019199D2E340028D38B /* SpotAPIClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1864018199D2E340028D38B /* SpotAPIClientTests.m */; };
+		D1864024199D3B260028D38B /* Request.m in Sources */ = {isa = PBXBuildFile; fileRef = D1864023199D3B260028D38B /* Request.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,7 +44,7 @@
 		D1863FF9199D2E340028D38B /* SpotAPIClient-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SpotAPIClient-Prefix.pch"; sourceTree = "<group>"; };
 		D1863FFB199D2E340028D38B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		D1863FFD199D2E340028D38B /* Document.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
-		D1863FFE199D2E340028D38B /* Document.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Document.m; sourceTree = "<group>"; };
+		D1863FFE199D2E340028D38B /* Document.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Document.mm; sourceTree = "<group>"; };
 		D1864001199D2E340028D38B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Document.xib; sourceTree = "<group>"; };
 		D1864004199D2E340028D38B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		D1864006199D2E340028D38B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -52,6 +53,8 @@
 		D1864014199D2E340028D38B /* SpotAPIClientTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SpotAPIClientTests-Info.plist"; sourceTree = "<group>"; };
 		D1864016199D2E340028D38B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D1864018199D2E340028D38B /* SpotAPIClientTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpotAPIClientTests.m; sourceTree = "<group>"; };
+		D1864022199D3B260028D38B /* Request.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Request.h; sourceTree = "<group>"; };
+		D1864023199D3B260028D38B /* Request.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Request.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,9 +121,11 @@
 			isa = PBXGroup;
 			children = (
 				D1863FFD199D2E340028D38B /* Document.h */,
-				D1863FFE199D2E340028D38B /* Document.m */,
+				D1863FFE199D2E340028D38B /* Document.mm */,
 				D1864000199D2E340028D38B /* Document.xib */,
 				D1864003199D2E340028D38B /* MainMenu.xib */,
+				D1864022199D3B260028D38B /* Request.h */,
+				D1864023199D3B260028D38B /* Request.m */,
 				D1864006199D2E340028D38B /* Images.xcassets */,
 				D1863FF2199D2E340028D38B /* Supporting Files */,
 			);
@@ -256,8 +261,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D1863FFF199D2E340028D38B /* Document.m in Sources */,
+				D1863FFF199D2E340028D38B /* Document.mm in Sources */,
 				D1863FF8199D2E340028D38B /* main.m in Sources */,
+				D1864024199D3B260028D38B /* Request.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,6 +404,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SpotAPIClient/SpotAPIClient-Prefix.pch";
 				INFOPLIST_FILE = "SpotAPIClient/SpotAPIClient-Info.plist";
@@ -411,6 +418,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SpotAPIClient/SpotAPIClient-Prefix.pch";
 				INFOPLIST_FILE = "SpotAPIClient/SpotAPIClient-Info.plist";

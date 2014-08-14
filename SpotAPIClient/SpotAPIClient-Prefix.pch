@@ -5,5 +5,11 @@
 //
 
 #ifdef __OBJC__
-	#import <Cocoa/Cocoa.h>
+	extern "C" {
+		#import <Foundation/Foundation.h>
+		#import <Cocoa/Cocoa.h>
+	}
+
+	#include <stack>
+	#include <string>
 #endif

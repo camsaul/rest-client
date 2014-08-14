@@ -10,4 +10,11 @@
 
 @interface Document : NSDocument
 
+@property (copy) NSString *urlFieldText;
+@property (copy) NSString *requestStatusText;
+@property (copy) NSTextStorage *responseText;
+
+@property () NSUInteger requestMethodIndex;
+@property () NSUInteger apiBaseURLIndex;
+
 @end
