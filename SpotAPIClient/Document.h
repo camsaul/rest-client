@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Spot. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import "KeyValueTable.h"
 
 @interface Document : NSDocument
 
@@ -17,7 +17,6 @@
 @property () NSUInteger requestMethodIndex;
 @property () NSUInteger apiBaseURLIndex;
 
-@property (strong) IBOutlet NSArrayController *headersArrayController;
-@property (strong) IBOutlet NSTableView *headersTableView;
+@property (strong) IBOutlet KeyValueTable *HTTPHeadersTable;
 
 @end

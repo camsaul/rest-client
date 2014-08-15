@@ -13,9 +13,6 @@
 @interface Document ()
 @property (nonatomic, strong) Request *request;
 
-@property (nonatomic, readonly) NSMutableDictionary *headers;
-@property (copy) NSMutableArray *headerPairs;
-
 @property (copy) NSMutableDictionary *getParams;
 @property (copy) NSMutableDictionary *postParams;
 
@@ -47,12 +44,6 @@
     self = [super init];
     if (self) {
 		self.urlFieldText = @"users/1";
-		self.headerPairs =
-		[@[
-		   [@{@"key": @"Content-Type", @"value": @"application/json"} mutableCopy],
-		   [@{@"key": @"Auth-Token", @"value": @""} mutableCopy],
-		   [@{@"key": @"API-Key", @"value": @""} mutableCopy],
-		   ] mutableCopy];
   
 		self.getParams = [NSMutableDictionary dictionary];
 		self.postParams = [NSMutableDictionary dictionary];
@@ -67,12 +58,12 @@
 - (void)windowControllerDidLoadNib:(NSWindowController *)aController
 {
 	[super windowControllerDidLoadNib:aController];
-	
-	NSParameterAssert(self.headersArrayController);
-	NSParameterAssert(self.headersTableView);
-	
-	[self.headersArrayController setContent:self.headerPairs];
-	[self.headersTableView reloadData];
+
+	NSParameterAssert(self.HTTPHeadersTable);
+	self.HTTPHeadersTable[@"Content-Type"] = @"application/json";
+	self.HTTPHeadersTable[@"Auth-Token"] = @"";
+	self.HTTPHeadersTable[@"API-Key"] = @"";
+
 }
 
 
@@ -105,18 +96,6 @@
 
 #pragma mark - Getters / Setters
 
-- (NSMutableDictionary *)headers {
-	NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-	for (NSDictionary *pair in self.headerPairs) {
-		NSString *key = pair[@"key"];
-		NSString *value = pair[@"value"];
-		if (key.length && value.length) {
-			dictionary[key] = value;
-		}
-	}
-	return dictionary;
-}
-
 - (NSString *)endpoint {
 	NSArray *components = [self.urlFieldText componentsSeparatedByString:@"?"];
 	if (!components.count) return self.urlFieldText;
@@ -134,7 +113,7 @@
 #pragma mark - Actions
 
 - (IBAction)goButtonPressed:(id)sender {
-	self.request = [[Request alloc] initWithRequestMethod:(RequestMethod)self.requestMethodIndex headers:self.headers baseURL:(APIBaseURL)self.apiBaseURLIndex endpoint:self.endpoint getParams:self.getParams postParams:self.postParams];
+	self.request = [[Request alloc] initWithRequestMethod:(RequestMethod)self.requestMethodIndex headers:self.HTTPHeadersTable.values baseURL:(APIBaseURL)self.apiBaseURLIndex endpoint:self.endpoint getParams:self.getParams postParams:self.postParams];
 	[self.request perform:^(NSData *responseData) {
 		NSParameterAssert(![NSThread isMainThread]);
 		
