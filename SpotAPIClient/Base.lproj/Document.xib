@@ -7,6 +7,8 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="Document">
             <connections>
+                <outlet property="headersArrayController" destination="HoO-Io-w5f" id="5oD-8P-ufZ"/>
+                <outlet property="headersTableView" destination="gOM-Dr-VI6" id="qab-2C-aEw"/>
                 <outlet property="window" destination="xOd-HO-29H" id="JIz-fz-R2o"/>
             </connections>
         </customObject>
@@ -226,8 +228,14 @@
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <connections>
+                                                    <binding destination="HoO-Io-w5f" name="value" keyPath="arrangedObjects.description" id="CtJ-Fm-QCf"/>
+                                                </connections>
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <connections>
+                                                <binding destination="HoO-Io-w5f" name="value" keyPath="arrangedObjects.key" id="xCt-Gk-h6Z"/>
+                                            </connections>
                                         </tableColumn>
                                         <tableColumn width="212" minWidth="40" maxWidth="1000" id="hvq-IA-6tG">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Value">
@@ -239,8 +247,14 @@
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <connections>
+                                                    <binding destination="HoO-Io-w5f" name="value" keyPath="arrangedObjects.description" id="zLh-cE-Bch"/>
+                                                </connections>
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <connections>
+                                                <binding destination="HoO-Io-w5f" name="value" keyPath="arrangedObjects.value" id="Tgq-fe-CWe"/>
+                                            </connections>
                                         </tableColumn>
                                     </tableColumns>
                                 </tableView>
@@ -343,5 +357,14 @@
             </connections>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="wdM-s2-BFZ"/>
+        <arrayController preservesSelection="NO" id="HoO-Io-w5f" userLabel="HTTP Headers Array Controller">
+            <declaredKeys>
+                <string>key</string>
+                <string>value</string>
+            </declaredKeys>
+            <connections>
+                <binding destination="wdM-s2-BFZ" name="contentArray" keyPath="values.self.headerPairs" id="tg2-Wu-Hi2"/>
+            </connections>
+        </arrayController>
     </objects>
 </document>

@@ -17,4 +17,7 @@
 @property () NSUInteger requestMethodIndex;
 @property () NSUInteger apiBaseURLIndex;
 
+@property (strong) IBOutlet NSArrayController *headersArrayController;
+@property (strong) IBOutlet NSTableView *headersTableView;
+
 @end

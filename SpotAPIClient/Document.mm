@@ -8,11 +8,14 @@
 
 #import "Document.h"
 #import "Request.h"
+#import "JSONFormatter.h"
 
 @interface Document ()
 @property (nonatomic, strong) Request *request;
 
-@property (copy) NSMutableDictionary *headers;
+@property (nonatomic, readonly) NSMutableDictionary *headers;
+@property (copy) NSMutableArray *headerPairs;
+
 @property (copy) NSMutableDictionary *getParams;
 @property (copy) NSMutableDictionary *postParams;
 
@@ -44,19 +47,32 @@
     self = [super init];
     if (self) {
 		self.urlFieldText = @"users/1";
-		self.headers = [@{@"Content-Type": @"application/json",
-						  @"Auth-Token": @"",
-						  @"API-Key": @""} mutableCopy];
+		self.headerPairs =
+		[@[
+		   [@{@"key": @"Content-Type", @"value": @"application/json"} mutableCopy],
+		   [@{@"key": @"Auth-Token", @"value": @""} mutableCopy],
+		   [@{@"key": @"API-Key", @"value": @""} mutableCopy],
+		   ] mutableCopy];
+  
 		self.getParams = [NSMutableDictionary dictionary];
 		self.postParams = [NSMutableDictionary dictionary];
     }
     return self;
 }
 
+- (void)windowControllerWillLoadNib:(NSWindowController *)windowController {
+	[super windowControllerWillLoadNib:windowController];
+}
+
 - (void)windowControllerDidLoadNib:(NSWindowController *)aController
 {
 	[super windowControllerDidLoadNib:aController];
-	// Add any code here that needs to be executed once the windowController has loaded the document's window.
+	
+	NSParameterAssert(self.headersArrayController);
+	NSParameterAssert(self.headersTableView);
+	
+	[self.headersArrayController setContent:self.headerPairs];
+	[self.headersTableView reloadData];
 }
 
 
@@ -84,127 +100,22 @@
 
 #pragma mark - Local Methods
 
-BOOL isKey = NO;
-BOOL canBeKey = YES;
-NSUInteger keyStart = 0;
 
-void appendChar(__unsafe_unretained NSTextStorage *output, unichar ch) {
-	NSString *str = [NSString stringWithCharacters:&ch length:1];
-	NSAttributedString *attributedStr = [[NSAttributedString alloc] initWithString:str];
-	[output appendAttributedString:attributedStr];
-}
-
-void appendStr(__unsafe_unretained NSTextStorage *output, std::string str) {
-	NSString *nsStr = [[NSString alloc] initWithCString:str.c_str() encoding:NSUTF8StringEncoding];
-	NSAttributedString *attributedStr = [[NSAttributedString alloc] initWithString:nsStr];
-	[output appendAttributedString:attributedStr];
-}
-
-void outputNewLine(__unsafe_unretained NSTextStorage *output, unsigned indentationLevel) {
-	std::string str { '\n' };
-	while (indentationLevel > 0) {
-		str += "      ";
-		indentationLevel--;
-	}
-	appendStr(output, str);
-}
-
-- (NSTextStorage *)formatResponse:(NSData *)data {
-	typedef enum : unsigned {
-		FieldTypeString,
-		FieldTypeDictionary,
-		FieldTypeArray,
-		FieldTypeNumber
-	} FieldType;
-	
-	NSTextStorage *output = [[NSTextStorage alloc] init];
-	unsigned indentationLevel = 0;
-	BOOL isEscaped = NO;
-	isKey = NO;
-	canBeKey = YES;
-	std::stack<FieldType> context;
-	
-	NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-	for (int i = 0; i < string.length; i++) {
-		bool outputNewLineAtEnd = false;
-		
-		unichar ch = [string characterAtIndex:i];
-		
-		switch (ch) {
-			case '\\': {
-				if (isEscaped) {
-					isEscaped = false;
-				} else {
-					isEscaped = true;
-				}
-			} break;
-			if (isEscaped) {
-				isEscaped = false;
-				break;
-			}
-			case '"': {
-				if (context.top() == FieldTypeString) {
-					context.pop();
-				} else if (context.top() == FieldTypeDictionary) {
-					if (!isKey && canBeKey) {
-						isKey = YES;
-						canBeKey = NO;
-						keyStart = output.length + 1;
-					}
-					context.push(FieldTypeString);
-				}
-			} break;
-			if (context.top() == FieldTypeString) break;
-			case ':': {
-				if (isKey) {
-					unsigned keyLen = output.length - keyStart - 1;
-					NSLog(@"keystart = %d, keyLen = %d", keyStart, keyLen);
-					NSRange range = NSMakeRange(keyStart, keyLen);
-					NSLog(@"Key = %d - %d --->'%@'", keyStart, keyStart + keyLen, [output attributedSubstringFromRange:range].string);
-					isKey = NO;
-					[output addAttribute:NSForegroundColorAttributeName value:[NSColor blueColor] range:range];
-				}
-			} break;
-			case ',': {
-				outputNewLineAtEnd = true;
-				canBeKey = YES;
-			} break;
-			case '{': {
-				context.push(FieldTypeDictionary);
-				indentationLevel++;
-				outputNewLineAtEnd = true;
-				canBeKey = YES;
-			} break;
-			case '}': {
-				NSParameterAssert(context.top() == FieldTypeDictionary);
-				context.pop();
-				--indentationLevel;
-				outputNewLine(output, indentationLevel);
-//				outputNewLine(output, --indentationLevel);
-			} break;
-		}
-		
-		appendChar(output, ch);
-		if (outputNewLineAtEnd) {
-			outputNewLine(output, indentationLevel);
-		}
-	}
-//	
-//	NSTextStorage *output = [[NSTextStorage alloc] initWithString:];
-//	NSMutableArray *chars = [NSMutableArray array];
-		
-//	char *cStr = (char *)data.bytes;
-//	char *ch = cStr;
-//	while(ch[0]) {
-//		[output appendCharacter:ch];
-//		ch++;
-//	}
-	
-	return output;
-}
 
 
 #pragma mark - Getters / Setters
+
+- (NSMutableDictionary *)headers {
+	NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+	for (NSDictionary *pair in self.headerPairs) {
+		NSString *key = pair[@"key"];
+		NSString *value = pair[@"value"];
+		if (key.length && value.length) {
+			dictionary[key] = value;
+		}
+	}
+	return dictionary;
+}
 
 - (NSString *)endpoint {
 	NSArray *components = [self.urlFieldText componentsSeparatedByString:@"?"];
@@ -228,7 +139,7 @@ void outputNewLine(__unsafe_unretained NSTextStorage *output, unsigned indentati
 		NSParameterAssert(![NSThread isMainThread]);
 		
 		// TODO Convert to AttributedString + format
-		NSTextStorage *responseStr = [self formatResponse:responseData];
+		NSTextStorage *responseStr = FormatResponse(responseData);
 		dispatch_async(dispatch_get_main_queue(), ^{
 			self.responseText = responseStr;
 		});

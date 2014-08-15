@@ -120,6 +120,8 @@ static NSOperationQueue *sRequestOperationQueue;
 	[sRequestOperationQueue cancelAllOperations];
 	
 	self.status = [NSString stringWithFormat:@"Performing request: \"%@ %@\"", self.URLRequest.HTTPMethod, self.URLRequest.URL.absoluteString];
+	NSLog(@"Headers: %@", self.URLRequest.allHTTPHeaderFields);
+	NSLog(@"Body: %@", [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding]);
 
 	__weak Request *weakSelf = self;
 	CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
