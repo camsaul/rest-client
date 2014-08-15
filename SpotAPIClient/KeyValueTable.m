@@ -58,6 +58,17 @@
 }
 
 
+#pragma mark - Actions
+
+- (IBAction)insert:(id)sender {
+	[self.arrayController insert:sender];
+}
+
+- (IBAction)remove:(id)sender {
+	[self.arrayController remove:sender];
+}
+
+
 #pragma mark - NSMutableDictionary Behavior
 
 - (void)setValuePairs:(NSMutableArray *)valuePairs {
@@ -89,7 +100,6 @@
 		}
 	}
 }
-
 
 - (id)objectForKeyedSubscript:(id)key {
 	return [self objectForKey:key];

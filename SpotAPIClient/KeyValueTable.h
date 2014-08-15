@@ -16,6 +16,9 @@
 @property (nonatomic, copy) NSMutableArray *valuePairs; // bind this
 @property (nonatomic, readonly) NSMutableDictionary *values;
 
+- (IBAction)insert:(id)sender;
+- (IBAction)remove:(id)sender;
+
 #pragma mark - Dictionary Behavior
 
 - (id)objectForKey:(id)aKey;
