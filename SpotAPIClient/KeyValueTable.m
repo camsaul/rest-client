@@ -7,8 +7,9 @@
 //
 
 #import "KeyValueTable.h"
+#import "KeyValuePair.h"
 
-@interface KeyValueTable () <NSTableViewDataSource>
+@interface KeyValueTable () <KeyValuePairDelegate>
 @end
 
 @implementation KeyValueTable
@@ -17,6 +18,7 @@
 	if (self = [super init]) {
 		self.valuePairs = [NSMutableArray array];
 		self.arrayController = [[NSArrayController alloc] initWithContent:self.valuePairs];
+		self.arrayController.objectClass = KeyValuePair.class;
 	}
 	return self;
 }
@@ -24,16 +26,9 @@
 - (void)awakeFromNib {
 	NSParameterAssert(self.arrayController);
 	NSParameterAssert(self.tableView);
-	
-	self.tableView.dataSource = self;
 
 	[self.arrayController bind:@"contentArray" toObject:self withKeyPath:@"valuePairs" options:nil];
 			
-	// col:
-	// <binding destination="HoO-Io-w5f" name="value" keyPath="arrangedObjects.key" id="xCt-Gk-h6Z"/>
-	// cell:
-	// 	<binding destination="HoO-Io-w5f" name="value" keyPath="arrangedObjects.description" id="CtJ-Fm-QCf"/>
-	
 	NSTableColumn *keyCol = self.tableView.tableColumns[0];
 	[keyCol bind:NSValueBinding toObject:self.arrayController withKeyPath:@"arrangedObjects.key" options:nil];
 	[[keyCol dataCell] bind:NSValueBinding toObject:self.arrayController withKeyPath:@"arrangedObjects.description" options:nil];
@@ -47,11 +42,9 @@
 
 - (NSMutableDictionary *)values {
 	NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-	for (NSDictionary *pair in self.valuePairs) {
-		NSString *key = pair[@"key"];
-		NSString *value = pair[@"value"];
-		if (key.length && value.length) {
-			dictionary[key] = value;
+	for (KeyValuePair *pair in self.valuePairs) {
+		if (pair.key.length && pair.value.length) {
+			dictionary[pair.key] = pair.value;
 		}
 	}
 	return dictionary;
@@ -61,7 +54,9 @@
 #pragma mark - Actions
 
 - (IBAction)insert:(id)sender {
-	[self.arrayController insert:sender];
+	[self.arrayController addObject:[KeyValuePair pairWithKey:nil value:nil delegate:self]];
+	NSLog(@"SENDER -> %@", sender);
+//	[self.arrayController insert:[KeyValuePair pairWithKey:nil value:nil delegate:self]];
 }
 
 - (IBAction)remove:(id)sender {
@@ -72,23 +67,30 @@
 #pragma mark - NSMutableDictionary Behavior
 
 - (void)setValuePairs:(NSMutableArray *)valuePairs {
+	if (_valuePairs == valuePairs) return;
+	
+	if (!_valuePairs) {
+		_valuePairs = valuePairs;
+		return;
+	}
+	
 	_valuePairs = valuePairs;
 	self.arrayController.content = valuePairs;
 	[self.tableView reloadData];
 }
 
 - (id)objectForKey:(id)aKey {
-	return self.values[@"key"][@"value"];
+	return self.values[aKey][@"value"];
 }
 
 - (void)setObject:(id)value forKey:(NSString *)key {
 	for (NSMutableDictionary *pair in self.valuePairs) {
-		if ([pair[@"key"] isEqualToString:key]) {
-			pair[@"value"] = value;
+		if ([pair.key isEqualToString:key]) {
+			pair.value = value;
 			return;
 		}
 	}
-	NSMutableDictionary *pair = [@{@"key": key, @"value": value} mutableCopy];
+	KeyValuePair *pair = [KeyValuePair pairWithKey:key value:value delegate:self];
 	[self.valuePairs addObject:pair];
 }
 
@@ -109,6 +111,14 @@
 	[self setObject:obj forKey:key];
 	self.arrayController.content = self.valuePairs;
 	[self.tableView reloadData];
+}
+
+
+#pragma mark - KeyValuePairDelegate
+
+- (void)keyValuePairUpdated:(KeyValuePair *)pair {
+	NSLog(@"GET Param updated: %@", pair);
+	[self.delegate keyValueTableValuesUpdated:self];
 }
 
 @end

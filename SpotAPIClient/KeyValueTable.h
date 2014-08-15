@@ -8,7 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
+@class KeyValueTable;
+
+@protocol KeyValueTableDelegate <NSObject>
+- (void)keyValueTableValuesUpdated:(KeyValueTable *)table;
+@end
+
+
 @interface KeyValueTable : NSObject
+
+/// This will be called when KVO otherwise wouldn't.
+@property (weak) IBOutlet id<KeyValueTableDelegate> delegate;
 
 @property (strong) IBOutlet NSArrayController *arrayController;
 @property (strong) IBOutlet NSTableView *tableView;

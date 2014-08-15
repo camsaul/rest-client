@@ -18,5 +18,8 @@
 @property () NSUInteger apiBaseURLIndex;
 
 @property (strong) IBOutlet KeyValueTable *HTTPHeadersTable;
+@property (strong) IBOutlet KeyValueTable *GETParamsTable;
+
+- (IBAction)urlTextFieldChanged:(id)sender;
 
 @end

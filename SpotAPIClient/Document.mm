@@ -10,10 +10,9 @@
 #import "Request.h"
 #import "JSONFormatter.h"
 
-@interface Document ()
+@interface Document () <KeyValueTableDelegate>
 @property (nonatomic, strong) Request *request;
 
-@property (copy) NSMutableDictionary *getParams;
 @property (copy) NSMutableDictionary *postParams;
 
 @property (readonly) NSString *endpoint; /// the part of the URL that doesn't include base URL or GET params.
@@ -43,9 +42,8 @@
 {
     self = [super init];
     if (self) {
-		self.urlFieldText = @"users/1";
+		self.urlFieldText = @"venues";
   
-		self.getParams = [NSMutableDictionary dictionary];
 		self.postParams = [NSMutableDictionary dictionary];
     }
     return self;
@@ -63,7 +61,12 @@
 	self.HTTPHeadersTable[@"Content-Type"] = @"application/json";
 	self.HTTPHeadersTable[@"Auth-Token"] = @"";
 	self.HTTPHeadersTable[@"API-Key"] = @"";
-
+	
+	NSParameterAssert(self.GETParamsTable);
+	self.GETParamsTable[@"offset"] = @0;
+	self.GETParamsTable[@"latitude"] = @37.78;
+	self.GETParamsTable[@"longitude"] = @-122.4;
+	[self.GETParamsTable addObserver:self forKeyPath:@"valuePairs" options:NSKeyValueObservingOptionInitial context:NULL];
 }
 
 
@@ -113,7 +116,7 @@
 #pragma mark - Actions
 
 - (IBAction)goButtonPressed:(id)sender {
-	self.request = [[Request alloc] initWithRequestMethod:(RequestMethod)self.requestMethodIndex headers:self.HTTPHeadersTable.values baseURL:(APIBaseURL)self.apiBaseURLIndex endpoint:self.endpoint getParams:self.getParams postParams:self.postParams];
+	self.request = [[Request alloc] initWithRequestMethod:(RequestMethod)self.requestMethodIndex headers:self.HTTPHeadersTable.values baseURL:(APIBaseURL)self.apiBaseURLIndex endpoint:self.endpoint getParams:self.GETParamsTable.values postParams:self.postParams];
 	[self.request perform:^(NSData *responseData) {
 		NSParameterAssert(![NSThread isMainThread]);
 		
@@ -124,6 +127,24 @@
 		});
 	}];
 }
+		
+- (IBAction)urlTextFieldChanged:(id)sender {
+	NSLog(@"URL Text Field -> %@", self.urlFieldText);
+	[self.GETParamsTable.valuePairs removeAllObjects];
+	NSArray *components = [self.urlFieldText componentsSeparatedByString:@"?"];
+	if (components.count > 1) {
+		NSString *paramsStr = components[1];
+		NSArray *params = [paramsStr componentsSeparatedByString:@"&"];
+		for (NSString *paramPair in params) {
+			NSArray *pair = [paramPair componentsSeparatedByString:@"="];
+			if (pair.count == 2) {
+				NSString *key = [pair[0] stringByRemovingPercentEncoding];
+				NSString *value = [pair[1] stringByRemovingPercentEncoding];
+				self.GETParamsTable[key] = value;
+			}
+		}
+	}
+}
 
 
 #pragma mark - KVO
@@ -131,11 +152,23 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([object isKindOfClass:Request.class] && [keyPath isEqualToString:@"status"]) {
 		Request *request = (Request *)object;
-		NSLog(@"Observe: request.status -> (%@) %@", request.status.class, request.status);
+		NSLog(@"KVO Update for request.status -> (%@) %@", request.status.class, request.status);
 		self.requestStatusText = request.status;
-		
+		return;
+	}
+	
+	if (object == self.GETParamsTable && [keyPath isEqualToString:@"valuePairs"]) {
+		self.urlFieldText = [Request URLSuffixForEndpoint:self.endpoint GETParams:self.GETParamsTable.values];
+		NSLog(@"KVO Update for GET Params Table -> %@", self.urlFieldText);
 	}
 }
 
+#pragma mark - KeyValueTableDelegate
+
+- (void)keyValueTableValuesUpdated:(KeyValueTable *)table {
+	if (table != self.GETParamsTable) return;
+	
+	self.urlFieldText = [Request URLSuffixForEndpoint:self.endpoint GETParams:self.GETParamsTable.values];
+}
 
 @end

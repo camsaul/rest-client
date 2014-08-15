@@ -78,7 +78,7 @@ NSTextStorage *FormatResponse(NSData *data) {
 					context.push(FieldTypeString);
 				}
 			} break;
-				if (context.top() == FieldTypeString) break;
+			
 			case ':': {
 				if (isKey) {
 					int keyLen = (int)output.length - keyStart - 1;
@@ -88,10 +88,22 @@ NSTextStorage *FormatResponse(NSData *data) {
 				}
 			} break;
 			case ',': {
+				if (context.top() == FieldTypeString) break;
 				outputNewLineAtEnd = true;
 				canBeKey = true;
 			} break;
 			case '{': {
+				if ((i + 1) != string.length) {
+					unichar next_char = [string characterAtIndex:i+1];
+					if (next_char == '}') {
+						// empty dict, just consume and continue
+						appendChar(output, '{');
+						appendChar(output, '}');
+						i++;
+						continue;
+					}
+				}
+				
 				context.push(FieldTypeDictionary);
 				indentationLevel++;
 				outputNewLineAtEnd = true;
@@ -99,6 +111,26 @@ NSTextStorage *FormatResponse(NSData *data) {
 			} break;
 			case '}': {
 				NSCParameterAssert(context.top() == FieldTypeDictionary);
+				context.pop();
+				--indentationLevel;
+				outputNewLine(output, indentationLevel);
+			} break;
+			case '[': {
+				unichar next_char = [string characterAtIndex:i+1];
+				if (next_char == ']') {
+					// empty array, just consume and continue
+					appendChar(output, '[');
+					appendChar(output, ']');
+					i++;
+					continue;
+				}
+							   
+				context.push(FieldTypeArray);
+				indentationLevel++;
+				outputNewLineAtEnd = true;
+			} break;
+			case ']': {
+				NSCParameterAssert(context.top() == FieldTypeArray);
 				context.pop();
 				--indentationLevel;
 				outputNewLine(output, indentationLevel);

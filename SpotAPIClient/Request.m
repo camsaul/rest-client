@@ -85,13 +85,17 @@ static NSOperationQueue *sRequestOperationQueue;
 	NSMutableString *paramsString = [[NSMutableString alloc] init];
 	[getParams enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
 		if (paramsString.length) [paramsString appendFormat:@"&"];
-		[paramsString appendFormat:@"%@=%@", key, value];
+		[paramsString appendFormat:@"%@=%@", [key stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], [value stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	}];
 	return paramsString;
 }
 
++ (NSString *)URLSuffixForEndpoint:(NSString *)endpoint GETParams:(NSDictionary *)getParams {
+	return [NSString stringWithFormat:@"%@?%@", endpoint, [self encodeGETParams:getParams]];
+}
+
 + (NSURL *)URLForBaseURL:(APIBaseURL)baseURL endpoint:(NSString *)endpoint getParams:(NSDictionary *)getParams {
-	return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@?%@", [self URLStringForBaseURL:baseURL], endpoint, [self encodeGETParams:getParams]]];
+	return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [self URLStringForBaseURL:baseURL], [self URLSuffixForEndpoint:endpoint GETParams:getParams]]];
 }
 
 

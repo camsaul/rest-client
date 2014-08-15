@@ -23,6 +23,8 @@ typedef enum : NSUInteger {
 /// Status of the request, updated as it
 @property (nonatomic, copy, readonly) NSString *status;
 
++ (NSString *)URLSuffixForEndpoint:(NSString *)endpoint GETParams:(NSDictionary *)getParams;
+
 - (instancetype)initWithRequestMethod:(RequestMethod)method headers:(NSDictionary *)headers baseURL:(APIBaseURL)baseURL endpoint:(NSString *)endpoint getParams:(NSDictionary *)getParams postParams:(NSDictionary *)postParams;
 
 /// perform request. Completion will be called on non-main thread

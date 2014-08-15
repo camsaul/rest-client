@@ -7,6 +7,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="Document">
             <connections>
+                <outlet property="GETParamsTable" destination="CoK-dc-xPO" id="ayC-5d-PHJ"/>
                 <outlet property="HTTPHeadersTable" destination="JWw-oF-5AN" id="PYj-rN-qao"/>
                 <outlet property="window" destination="xOd-HO-29H" id="JIz-fz-R2o"/>
             </connections>
@@ -25,13 +26,17 @@
                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nG5-6Y-UNB">
                         <rect key="frame" x="406" y="650" width="887" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="venues/100/guides" drawsBackground="YES" id="FRo-kV-tWJ">
+                        <constraints>
+                            <constraint firstAttribute="height" constant="22" id="7JQ-cz-XS7"/>
+                        </constraints>
+                        <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="venues/100/guides" drawsBackground="YES" usesSingleLineMode="YES" id="FRo-kV-tWJ">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="-2" name="value" keyPath="self.urlFieldText" id="VSv-fo-ffI"/>
+                            <action selector="urlTextFieldChanged:" target="-2" id="SQH-7q-QdI"/>
+                            <binding destination="-2" name="value" keyPath="self.urlFieldText" id="3RB-aI-b5m"/>
                         </connections>
                     </textField>
                     <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m2y-8U-odQ">
@@ -125,15 +130,6 @@
                             <binding destination="-2" name="selectedIndex" keyPath="self.requestMethodIndex" id="pot-56-YE9"/>
                         </connections>
                     </segmentedControl>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EZp-j5-Dnc">
-                        <rect key="frame" x="636" y="401" width="104" height="27"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Response" id="N4U-tC-zT7">
-                            <font key="font" metaFont="system" size="22"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AKm-BQ-Svk">
                         <rect key="frame" x="1301" y="644" width="60" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -159,8 +155,8 @@
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn width="116" minWidth="40" maxWidth="1000" id="4Or-6Z-SIS">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                        <tableColumn width="216" minWidth="40" maxWidth="1000" id="4Or-6Z-SIS">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Param">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
@@ -172,8 +168,8 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn width="312" minWidth="40" maxWidth="1000" id="yB7-ti-wB7">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                        <tableColumn width="212" minWidth="40" maxWidth="1000" id="yB7-ti-wB7">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Value">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
@@ -322,12 +318,35 @@
                             <action selector="remove:" target="JWw-oF-5AN" id="YV7-3p-cQb"/>
                         </connections>
                     </button>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kay-t7-1g8">
+                        <rect key="frame" x="861" y="432" width="51" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="+" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8Se-YN-GXT">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="insert:" target="CoK-dc-xPO" id="Osk-kw-P4s"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nt4-Y2-tsB">
+                        <rect key="frame" x="813" y="432" width="48" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="-" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ktQ-Nz-8QD">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="remove:" target="CoK-dc-xPO" id="wnb-IH-O1V"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="nG5-6Y-UNB" firstAttribute="leading" secondItem="rpK-OH-ywP" secondAttribute="trailing" constant="14" id="0th-dD-yU6"/>
                     <constraint firstItem="Xcy-Jv-yvR" firstAttribute="centerX" secondItem="m2y-8U-odQ" secondAttribute="centerX" id="8Vu-vw-JEF"/>
+                    <constraint firstItem="kay-t7-1g8" firstAttribute="leading" secondItem="nt4-Y2-tsB" secondAttribute="trailing" constant="12" id="Acw-u1-tbS"/>
+                    <constraint firstItem="1Kt-pS-P0A" firstAttribute="top" secondItem="m2y-8U-odQ" secondAttribute="bottom" constant="44" id="Akt-zn-nhf"/>
                     <constraint firstItem="fct-n8-Ej5" firstAttribute="top" secondItem="c4K-AA-loP" secondAttribute="bottom" constant="8" id="BWy-qL-EVU"/>
-                    <constraint firstAttribute="centerX" secondItem="EZp-j5-Dnc" secondAttribute="centerX" id="Bk1-24-m4f"/>
                     <constraint firstItem="r8x-IN-dxt" firstAttribute="top" secondItem="fct-n8-Ej5" secondAttribute="bottom" constant="8" id="CwL-2H-Xl5"/>
                     <constraint firstAttribute="bottom" secondItem="yDE-aP-cXq" secondAttribute="bottom" constant="20" id="DQA-fY-JxV"/>
                     <constraint firstItem="yDE-aP-cXq" firstAttribute="leading" secondItem="gIp-Ho-8D9" secondAttribute="leading" constant="20" id="KMc-2K-2s6"/>
@@ -345,21 +364,23 @@
                     <constraint firstAttribute="trailing" secondItem="AKm-BQ-Svk" secondAttribute="trailing" constant="20" id="WqW-Iw-eEl"/>
                     <constraint firstItem="pga-bw-cJb" firstAttribute="leading" secondItem="fct-n8-Ej5" secondAttribute="trailing" constant="14" id="XEp-uw-CQt"/>
                     <constraint firstItem="nG5-6Y-UNB" firstAttribute="top" secondItem="gIp-Ho-8D9" secondAttribute="top" constant="20" id="XmA-Gd-bXR"/>
-                    <constraint firstItem="EZp-j5-Dnc" firstAttribute="top" secondItem="fct-n8-Ej5" secondAttribute="bottom" constant="40" id="Xxp-Lj-zNl"/>
                     <constraint firstItem="fct-n8-Ej5" firstAttribute="height" secondItem="m2y-8U-odQ" secondAttribute="height" id="bTv-Uh-fmJ"/>
                     <constraint firstAttribute="trailing" secondItem="1Kt-pS-P0A" secondAttribute="trailing" constant="20" id="cQq-5a-zvU"/>
                     <constraint firstItem="KFY-gO-v89" firstAttribute="top" secondItem="fct-n8-Ej5" secondAttribute="bottom" constant="8" id="dCz-Vd-iNd"/>
-                    <constraint firstItem="yDE-aP-cXq" firstAttribute="top" secondItem="EZp-j5-Dnc" secondAttribute="bottom" constant="8" id="e8S-WA-mX2"/>
+                    <constraint firstItem="pga-bw-cJb" firstAttribute="trailing" secondItem="kay-t7-1g8" secondAttribute="trailing" id="e7q-W3-LTK"/>
                     <constraint firstItem="fct-n8-Ej5" firstAttribute="top" secondItem="pga-bw-cJb" secondAttribute="top" id="eCY-xa-aw9"/>
                     <constraint firstItem="fct-n8-Ej5" firstAttribute="top" secondItem="rpK-OH-ywP" secondAttribute="bottom" constant="34" id="eOd-H4-n3c"/>
                     <constraint firstItem="CYI-T9-aBt" firstAttribute="leading" secondItem="gIp-Ho-8D9" secondAttribute="leading" constant="20" id="fic-BA-EVG"/>
                     <constraint firstItem="m2y-8U-odQ" firstAttribute="leading" secondItem="pga-bw-cJb" secondAttribute="trailing" constant="14" id="fxj-f2-RiV"/>
                     <constraint firstItem="m2y-8U-odQ" firstAttribute="height" secondItem="yDE-aP-cXq" secondAttribute="height" multiplier="0.4" id="h5W-bw-xUd"/>
+                    <constraint firstItem="kay-t7-1g8" firstAttribute="top" secondItem="pga-bw-cJb" secondAttribute="bottom" constant="8" id="hKU-vh-kXT"/>
                     <constraint firstItem="fct-n8-Ej5" firstAttribute="leading" secondItem="gIp-Ho-8D9" secondAttribute="leading" constant="20" id="hpn-B4-tkD"/>
                     <constraint firstAttribute="centerX" secondItem="dZn-KT-ULM" secondAttribute="centerX" id="ifz-Pg-KeV"/>
                     <constraint firstItem="CYI-T9-aBt" firstAttribute="top" secondItem="gIp-Ho-8D9" secondAttribute="top" constant="20" id="jd8-Ej-qFi"/>
+                    <constraint firstItem="kay-t7-1g8" firstAttribute="leading" secondItem="nt4-Y2-tsB" secondAttribute="trailing" constant="12" id="lpg-vb-WFM"/>
                     <constraint firstItem="c4K-AA-loP" firstAttribute="centerX" secondItem="fct-n8-Ej5" secondAttribute="centerX" id="oEm-rN-cBf"/>
                     <constraint firstItem="AKm-BQ-Svk" firstAttribute="leading" secondItem="nG5-6Y-UNB" secondAttribute="trailing" constant="14" id="rIQ-qR-O0m"/>
+                    <constraint firstItem="nt4-Y2-tsB" firstAttribute="top" secondItem="pga-bw-cJb" secondAttribute="bottom" constant="8" id="rx7-tr-Jia"/>
                     <constraint firstItem="yDE-aP-cXq" firstAttribute="top" secondItem="1Kt-pS-P0A" secondAttribute="bottom" constant="14" id="sYO-ke-L8W"/>
                     <constraint firstItem="fct-n8-Ej5" firstAttribute="height" secondItem="pga-bw-cJb" secondAttribute="height" id="szA-la-RF0"/>
                     <constraint firstItem="fct-n8-Ej5" firstAttribute="top" secondItem="m2y-8U-odQ" secondAttribute="top" id="u8o-6L-lme"/>
@@ -372,7 +393,14 @@
         <userDefaultsController representsSharedInstance="YES" id="wdM-s2-BFZ"/>
         <customObject id="JWw-oF-5AN" userLabel="HTTP Headers Table" customClass="KeyValueTable">
             <connections>
+                <outlet property="delegate" destination="-2" id="CcX-Wu-0rk"/>
                 <outlet property="tableView" destination="gOM-Dr-VI6" id="5q7-Fy-Iff"/>
+            </connections>
+        </customObject>
+        <customObject id="CoK-dc-xPO" userLabel="GET Params Table" customClass="KeyValueTable">
+            <connections>
+                <outlet property="delegate" destination="-2" id="bqo-TW-Ley"/>
+                <outlet property="tableView" destination="4Lg-q5-Bfg" id="os7-NB-AKS"/>
             </connections>
         </customObject>
     </objects>

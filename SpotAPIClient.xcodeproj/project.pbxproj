@@ -22,6 +22,7 @@
 		D1864024199D3B260028D38B /* Request.m in Sources */ = {isa = PBXBuildFile; fileRef = D1864023199D3B260028D38B /* Request.m */; };
 		D1864027199D8A230028D38B /* JSONFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = D1864026199D8A230028D38B /* JSONFormatter.m */; };
 		D186402A199D8C270028D38B /* KeyValueTable.m in Sources */ = {isa = PBXBuildFile; fileRef = D1864029199D8C270028D38B /* KeyValueTable.m */; };
+		D1E2EC70199DA852007F1E48 /* KeyValuePair.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E2EC6F199DA852007F1E48 /* KeyValuePair.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,8 @@
 		D1864026199D8A230028D38B /* JSONFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONFormatter.m; sourceTree = "<group>"; };
 		D1864028199D8C270028D38B /* KeyValueTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyValueTable.h; sourceTree = "<group>"; };
 		D1864029199D8C270028D38B /* KeyValueTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyValueTable.m; sourceTree = "<group>"; };
+		D1E2EC6E199DA852007F1E48 /* KeyValuePair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyValuePair.h; sourceTree = "<group>"; };
+		D1E2EC6F199DA852007F1E48 /* KeyValuePair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyValuePair.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +129,8 @@
 		D1863FF1199D2E340028D38B /* SpotAPIClient */ = {
 			isa = PBXGroup;
 			children = (
+				D1E2EC6E199DA852007F1E48 /* KeyValuePair.h */,
+				D1E2EC6F199DA852007F1E48 /* KeyValuePair.m */,
 				D1864028199D8C270028D38B /* KeyValueTable.h */,
 				D1864029199D8C270028D38B /* KeyValueTable.m */,
 				D1863FFD199D2E340028D38B /* Document.h */,
@@ -276,6 +281,7 @@
 				D186402A199D8C270028D38B /* KeyValueTable.m in Sources */,
 				D1863FF8199D2E340028D38B /* main.m in Sources */,
 				D1864024199D3B260028D38B /* Request.m in Sources */,
+				D1E2EC70199DA852007F1E48 /* KeyValuePair.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,6 +504,7 @@
 				D186401E199D2E340028D38B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D186401F199D2E340028D38B /* Build configuration list for PBXNativeTarget "SpotAPIClientTests" */ = {
 			isa = XCConfigurationList;
@@ -506,6 +513,7 @@
 				D1864021199D2E340028D38B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
